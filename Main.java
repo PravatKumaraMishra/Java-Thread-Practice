@@ -5,5 +5,6 @@ public class Main {
             Thread thread = new Thread(new DownloadTask());
             thread.start();
         }
+        System.out.println("Main execution Completed");
     }
 }
