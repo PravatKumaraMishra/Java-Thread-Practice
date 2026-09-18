@@ -1,14 +1,25 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
+        DownloadStatus status = new DownloadStatus();
 
-        Thread thread = new Thread(new DownloadTask());
-        thread.start();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        List<Thread> threads = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            Thread thread = new Thread(new DownloadTask(status));
+            thread.start();
+            threads.add(thread);
         }
-        thread.interrupt();
-        System.out.println("Main execution Completed");
+        for (var thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Total Bytes: " + status.getTotalBytes());
     }
 }
