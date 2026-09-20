@@ -1,16 +1,10 @@
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 public class DownloadStatus {
     private int totalBytes;
-    private Lock lock = new ReentrantLock();
+    private Object incrementObject = new Object();
 
     public void incrementTotalBytes() {
-        lock.lock();
-        try {
+        synchronized (incrementObject) {
             totalBytes++;
-        } finally {
-            lock.unlock();
         }
     }
 
