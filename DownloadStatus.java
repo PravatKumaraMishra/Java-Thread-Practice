@@ -1,14 +1,22 @@
 public class DownloadStatus {
+    private boolean isDone;
     private int totalBytes;
     private int totalFiles;
-    private volatile boolean isDone;
+
+    public int getTotalBytes() {
+        return totalBytes;
+    }
+
+    public synchronized void incrementTotalBytes() {
+        totalBytes++;
+    }
+
+    public void incrementTotalFiles() {
+        totalFiles++;
+    }
 
     public int getTotalFiles() {
         return totalFiles;
-    }
-
-    public void setTotalFiles(int totalFiles) {
-        this.totalFiles = totalFiles;
     }
 
     public boolean isDone() {
@@ -16,14 +24,6 @@ public class DownloadStatus {
     }
 
     public void done() {
-        this.isDone = true;
-    }
-
-    public synchronized void incrementTotalBytes() {
-        totalBytes++;
-    }
-
-    public int getTotalBytes() {
-        return totalBytes;
+        isDone = true;
     }
 }
