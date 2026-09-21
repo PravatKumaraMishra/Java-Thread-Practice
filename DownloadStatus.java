@@ -1,14 +1,16 @@
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class DownloadStatus {
     private boolean isDone;
-    private int totalBytes;
+    private AtomicInteger totalBytes = new AtomicInteger();
     private int totalFiles;
 
     public int getTotalBytes() {
-        return totalBytes;
+        return totalBytes.get();
     }
 
-    public synchronized void incrementTotalBytes() {
-        totalBytes++;
+    public void incrementTotalBytes() {
+        totalBytes.incrementAndGet();
     }
 
     public void incrementTotalFiles() {
