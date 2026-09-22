@@ -1,29 +1,24 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 public class Main {
     public static void main(String[] args) {
-        var collection = Collections.synchronizedList(new ArrayList<>());
-
-        var thread1 = new Thread(() -> {
-            collection.addAll(Arrays.asList(1, 2, 3));
-        });
-
-        var thread2 = new Thread(() -> {
-            collection.addAll(Arrays.asList(4, 5, 6));
-        });
-
-        thread1.start();
-        thread2.start();
+        var executor = Executors.newFixedThreadPool(2);
 
         try {
-            thread1.join();
-            thread2.join();
-        } catch (InterruptedException e) {
+            var future = executor.submit(() -> {
+                LongTask.simulate();
+                return 1;
+            });
+            System.out.println("Do more Work");
+            var result = future.get();
+            System.out.println(result);
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
-        System.out.println("values: " + collection.toString());
+        finally {
+            executor.shutdown();
+        }
     }
 }
